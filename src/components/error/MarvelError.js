@@ -2,7 +2,7 @@ import img from './error.gif';
 
 const MarvelError = () => {
     return (
-        <img src={img} style={{display: 'block', width: '250px', height: '250px', margin: '0 auto', objectFit: 'contain'}}/>
+        <img src={img} style={{display: 'block', width: '250px', height: '250px', margin: '0 auto', objectFit: 'contain'}} alt={'Error Message'}/>
     )
 }
 export default MarvelError;

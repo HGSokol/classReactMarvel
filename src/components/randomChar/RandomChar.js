@@ -20,14 +20,14 @@ class RandomChar extends Component{
         error: false,
     }
 
+    marvelService = new MarvelService();
+    
     onError = () => {
         this.setState({
             loading:false,
             error: true,
         })
     }
-    
-    marvelService = new MarvelService();
 
     onCharLoaded = (char) => {
         this.setState({
@@ -46,11 +46,17 @@ class RandomChar extends Component{
     render(){
 
         const {char, loading, error} = this.state;
+ 
+        let errorMes = error? <MarvelError/>: null;
+        let load = loading? <Spinner/>: null;
+        let content = !error && !loading?  <View char={char}/>: null;
 
         return (
             <div className="randomchar">
-                {/* условный рендеринг */}
-                {error? <MarvelError/>: loading? <Spinner/> : <View char={char}/>}
+                {/* условный рендеринг */ }
+                {errorMes}
+                {load}
+                {content}
                 <div className="randomchar__static">
                     <p className="randomchar__title">
                         Random character for today!<br/>
