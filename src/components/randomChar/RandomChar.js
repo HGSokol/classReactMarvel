@@ -13,7 +13,7 @@ class RandomChar extends Component{
     componentDidMount = () => {
         this.getRandomCharacter()
     }
-    
+
     state ={
         char: {},
         loading: true,
@@ -81,7 +81,10 @@ const View = ({char}) => {
     const {img, name, description, homepage, wiki} = char
     return (
         <div className="randomchar__block">
-        <img src={img} alt="Random character" className="randomchar__img"/>
+        <img 
+            src={img} 
+            style={img.includes('image_not_available.jpg') ? {objectFit: "contain"} : {objectFit: "cover"}}
+            alt="Random character" className="randomchar__img"/>
         <div className="randomchar__info">
             <p className="randomchar__name">{name}</p>
             <p className="randomchar__descr">
