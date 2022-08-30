@@ -9,8 +9,8 @@ import mjolnir from '../../resources/img/mjolnir.png';
 
 
 class RandomChar extends Component{
-    constructor(props){
-        super(props);
+   
+    componentDidMount = () => {
         this.getRandomCharacter()
     }
     
