@@ -19,13 +19,14 @@ class App extends Component{
         })
     }
 
+
     render(){
         const {selectedChar} = this.state
         return (
             <div className="app">
                 <AppHeader/>
                 <main>
-                    <RandomChar/>
+                    <RandomChar stateLift={this.stateLift}/>
                     <div className="char__content">
                         <CharList stateLift={this.stateLift}/>
                         <CharInfo charId={selectedChar}/>

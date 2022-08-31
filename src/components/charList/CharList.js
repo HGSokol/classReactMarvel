@@ -39,6 +39,8 @@ class CharList extends Component{
             .catch(this.catchError)
     }
 
+
+
     getAllCards = (item) => {
         const all = item.map(e =>{
            return(
@@ -69,7 +71,7 @@ class CharList extends Component{
                     {allItems}
                 </ul>
                 <button className="button button__main button__long">
-                    <div className="inner">load more</div>
+                    <div className="inner" >load more</div>
                 </button>
             </div>
         )

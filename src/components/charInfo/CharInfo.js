@@ -35,6 +35,11 @@ class CharInfo extends Component{
         }
     }
 
+    // componentDidCatch(err, inf){
+    //     console.log(err)
+    //     console.log(inf)
+    // }
+
     updateChar = () => {
         const {charId} = this.props
         if(!charId) {
@@ -87,7 +92,6 @@ class CharInfo extends Component{
 }
 
 const View = ({char}) => {
-    
     const {name, img, homepage, wiki, description, comics} = char;
 
     const comicsV = (comic) => {
