@@ -6,7 +6,6 @@ import Spinner from '../spinner/Spinner';
 import MarverlError from '../error/MarvelError'
 
 import './charList.scss';
-// import abyss from '../../resources/img/abyss.jpg';
 
 class CharList extends Component{
     constructor(props){
