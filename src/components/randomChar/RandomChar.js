@@ -103,12 +103,12 @@ class View extends Component {
         const {img, name, description, homepage, wiki, id} = this.props.char
         // console.log(this.props)
         return (
-                <div className="randomchar__block" onClick={() => this.onClLoad(id)}>
+                <div className="randomchar__block" >
                     <img 
                         src={img} 
                         style={img.includes('image_not_available.jpg') ? {objectFit: "contain"} : {objectFit: "cover"}}
                         alt="Random character" className="randomchar__img"
-                        />
+                        onClick={() => this.onClLoad(id)}/>
                     <div className="randomchar__info">
                         <p className="randomchar__name">{name}</p>
                         <p className="randomchar__descr">
