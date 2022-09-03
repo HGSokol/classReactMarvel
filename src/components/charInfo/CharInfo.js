@@ -1,61 +1,143 @@
-import './charInfo.scss';
-import thor from '../../resources/img/thor.jpeg';
+import { Component } from 'react';
+import PropTypes from 'prop-types'
 
-const CharInfo = () => {
+import MarvelService from '../../services/MarvelService';
+import Spinner from '../spinner/Spinner.js';
+import MarvelError from '../error/MarvelError.js';
+import Skeleton from '../skeleton/Skeleton'
+
+import './charInfo.scss';
+
+class CharInfo extends Component{
+    constructor(props){
+        super(props);
+        this.state ={
+            char: null,
+            loading: false,
+            error: false,
+        }
+    }
+    marvelService = new MarvelService();
+
+    componentDidMount() {
+        this.marvelService.getAllCharacters()
+            .then(res => {
+                this.setState({
+                    char: res[Math.floor(Math.random()*res.length)],
+                    loading: false,
+                    error: false,
+                })
+            })
+    }
+
+    componentDidUpdate(prevProps) {
+        if(prevProps.charId !== this.props.charId){
+            this.updateChar()
+        }
+    }
+
+    updateChar = () => {
+        const {charId} = this.props
+        if(!charId) {
+            return;
+        }
+        this.onLoading();
+
+        this.marvelService.getCharacter(charId)
+            .then(this.onCharLoaded)
+            .catch(this.onError)
+    }
+
+    onError = () => {
+        this.setState({
+            loading:false,
+            error: true,
+        })
+    }
+// spinner before render
+    onLoading = () => {
+        this.setState({
+            loading: true,
+        })
+    }
+
+    onCharLoaded = (char) => {
+        this.setState({
+            char, 
+            loading: false,
+        });
+    }
+
+    
+    render(){
+        const {char, loading, error} = this.state
+        const skeleton = (!char && !loading && !error)? <Skeleton/>: null 
+        const errorMes = error? <MarvelError/>: null;
+        const load = loading? <Spinner/>: null;
+        const content = (!error && !loading && char)?  <View char={char}/>: null;
+
+        return (
+            <div className="char__info">
+                {skeleton}
+                {errorMes}
+                {load}
+                {content}
+            </div>
+        )
+    }
+}
+
+const View = ({char}) => {
+    const {name, img, homepage, wiki, description, comics} = char;
+
+    const comicsV = (comic) => {
+        const arr = comic.map((e,i) => {
+            return (
+                <li className="char__comics-item" key={i}>
+                    <a href={e.resourceURI}>{e.name}</a>
+                </li>
+            )
+        })
+        return (
+            <>
+                {arr}
+            </>
+        )
+    }
+    const arr1 = comicsV(comics)
+
     return (
-        <div className="char__info">
+        <>
             <div className="char__basics">
-                <img src={thor} alt="abyss"/>
-                <div>
-                    <div className="char__info-name">thor</div>
+                <img src={img} style={img.includes('image_not_available.jpg') ? {objectFit: "contain"} : {objectFit: "cover"}} alt={name}/>
+                    <div>
+                    <div className="char__info-name">{name}</div>
                     <div className="char__btns">
-                        <a href="#" className="button button__main">
-                            <div className="inner">homepage</div>
+                    <a href={homepage} className="button button__main">
+                        <div className="inner">homepage</div>
                         </a>
-                        <a href="#" className="button button__secondary">
+                            <a href={wiki} className="button button__secondary">
                             <div className="inner">Wiki</div>
                         </a>
                     </div>
                 </div>
             </div>
             <div className="char__descr">
-                In Norse mythology, Loki is a god or jötunn (or both). Loki is the son of Fárbauti and Laufey, and the brother of Helblindi and Býleistr. By the jötunn Angrboða, Loki is the father of Hel, the wolf Fenrir, and the world serpent Jörmungandr. By Sigyn, Loki is the father of Nari and/or Narfi and with the stallion Svaðilfari as the father, Loki gave birth—in the form of a mare—to the eight-legged horse Sleipnir. In addition, Loki is referred to as the father of Váli in the Prose Edda.
+            {description}
             </div>
             <div className="char__comics">Comics:</div>
             <ul className="char__comics-list">
-                <li className="char__comics-item">
-                    All-Winners Squad: Band of Heroes (2011) #3
-                </li>
-                <li className="char__comics-item">
-                    Alpha Flight (1983) #50
-                </li>
-                <li className="char__comics-item">
-                    Amazing Spider-Man (1999) #503
-                </li>
-                <li className="char__comics-item">
-                    Amazing Spider-Man (1999) #504
-                </li>
-                <li className="char__comics-item">
-                    AMAZING SPIDER-MAN VOL. 7: BOOK OF EZEKIEL TPB (Trade Paperback)
-                </li>
-                <li className="char__comics-item">
-                    Amazing-Spider-Man: Worldwide Vol. 8 (Trade Paperback)
-                </li>
-                <li className="char__comics-item">
-                    Asgardians Of The Galaxy Vol. 2: War Of The Realms (Trade Paperback)
-                </li>
-                <li className="char__comics-item">
-                    Vengeance (2011) #4
-                </li>
-                <li className="char__comics-item">
-                    Avengers (1963) #1
-                </li>
-                <li className="char__comics-item">
-                    Avengers (1996) #1
-                </li>
+                {
+                    arr1.props.children.length === 0? 'There is no comics with this character': arr1.props.children.slice(0,10)
+                }
             </ul>
-        </div>
+        </>
     )
 }
+
+CharInfo.propTypes = {
+    charId: PropTypes.number
+}
+
 
 export default CharInfo;

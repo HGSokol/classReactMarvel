@@ -15,6 +15,9 @@
         width: 180px;
         height: 180px;
         object-fit: cover;
+        &:hover{
+            cursor: pointer;
+        }
     }
     &__info {
         display: grid;
